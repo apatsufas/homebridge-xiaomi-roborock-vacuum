@@ -6,6 +6,8 @@
 const Vacuum = require("./devices/vacuum");
 const MijiaVacuum = require("./devices/mijiavacuum");
 const ViomiVacuum = require("./devices/viomivacuum");
+const DreameVacuum = require("./devices/dreamevacuum");
+
 
 module.exports = {
   "rockrobo.vacuum.v1": Vacuum,
@@ -17,10 +19,10 @@ module.exports = {
   "roborock.vacuum.e2": Vacuum,
   "roborock.vacuum.s4": Vacuum,
   "roborock.vacuum.a10": Vacuum,
+  "dreame.vacuum.mc1808": DreameVacuum,
 
   "roborock.vacuum.m1s": MijiaVacuum,
-
-  "dreame.vacuum.mc1808": ViomiVacuum,
+  
   "viomi.vacuum.v7": ViomiVacuum,
   "viomi.vacuum.v8": ViomiVacuum,
 };

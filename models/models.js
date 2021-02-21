@@ -88,7 +88,8 @@ module.exports = {
   },
   "dreame.vacuum.mc1808": [
     {
-      speed: speedmodes.viomi,
+      speed: speedmodes.dreame,
+      waterspeed: watermodes.dreame,
     },
   ],
   "viomi.vacuum.v7": [

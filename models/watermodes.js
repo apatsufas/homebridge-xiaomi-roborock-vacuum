@@ -61,4 +61,26 @@ module.exports = {
       name: "Custom",
     },
   ],
+  dreame: [
+    // 0%      = Off / Aus
+    {
+      miLevel: -1,
+      name: "Off",
+    },
+    // 33%      = Low
+    {
+      miLevel: 1,
+      name: "Low",
+    },
+    // 66%      = Medium
+    {
+      miLevel: 1,
+      name: "Medium",
+    },
+    // 100%      = High
+    {
+      miLevel: 2,
+      name: "High",
+    },
+  ]
 };

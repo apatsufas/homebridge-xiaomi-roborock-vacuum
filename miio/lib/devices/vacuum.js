@@ -57,6 +57,8 @@ module.exports = class extends Vacuum.with(
           return "charger-offline";
         case 3:
           return "waiting";
+        case 4:
+            return "remote-control-active";
         case 5:
           return "cleaning";
         case 6:
@@ -77,12 +79,16 @@ module.exports = class extends Vacuum.with(
           return "updating";
         case 15:
           return "docking";
+        case 16:
+            return "going-to-target";
         case 17:
           return "zone-cleaning";
         case 18:
           return "room-cleaning";
         case 100:
           return "full";
+        case 101:
+            return "offline";
       }
       return "unknown-" + s;
     });
@@ -129,7 +135,6 @@ module.exports = class extends Vacuum.with(
     if (key === "state") {
       // Update charging state
       this.updateCharging(value === "charging");
-
       switch (value) {
         case "cleaning":
         case "spot-cleaning":
@@ -347,7 +352,6 @@ module.exports = class extends Vacuum.with(
   loadProperties(props) {
     // We override loadProperties to use get_status and get_consumables
     props = props.map((key) => this._reversePropertyDefinitions[key] || key);
-
     return Promise.all([
       this.call("get_status"),
       this.call("get_consumable"),

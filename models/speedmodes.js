@@ -246,6 +246,33 @@ const SPEEDMODES = {
       name: "Turbo",
     },
   ],
+  dreame: [
+    // 0%      = Off / Aus
+    {
+      miLevel: -1,
+      name: "Off",
+    },
+    // 25%      = Silent
+    {
+      miLevel: 0,
+      name: "Silent",
+    },
+    // 50%      = Standard
+    {
+      miLevel: 1,
+      name: "Standard",
+    },
+    // 75%      = Strong
+    {
+      miLevel: 2,
+      name: "Strong",
+    },
+    // 100%      = Turbo
+    {
+      miLevel: 3,
+      name: "Turbo",
+    },
+  ],
 };
 
 /**
