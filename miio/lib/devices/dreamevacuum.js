@@ -181,13 +181,6 @@ module.exports = class extends Vacuum.with(
       }
     });
 
-    this.defineProperty("serial-number", {
-      name: "serialNumber",
-      command: {
-        "siid": 1,
-        "piid": 3
-      }
-    });
     // Consumable status - times for brushes and filters
     // From https://github.com/rytilahti/python-miio/issues/550#issuecomment-570808184
     this.defineProperty("brush_left_time", {
@@ -310,7 +303,7 @@ module.exports = class extends Vacuum.with(
     }));
   }
 
-  call_action(siid, aiid, params) {
+  call_action(siid, aiid, params, options) {
     //{"did":"<mydeviceID>","siid":18,"aiid":1,"in":[{"piid":1,"value":2}]
     if (params === undefined) {
       params = [];
@@ -321,7 +314,22 @@ module.exports = class extends Vacuum.with(
       "aiid": aiid,
       "in": params,
     }
-    return this.call("action", payload)
+    return this.call("action", payload, options)
+  }
+
+  set_property(siid, piid, value, options){
+    //Sets property value using the existing mapping.
+    //[{"did": f"set-{siid}-{piid}", "siid": siid, "piid": piid, "value": value}],
+    const payload = {
+      "did": "set-" + siid + "-" + piid,
+      "siid": siid,
+      "piid": piid,
+      "value": value,
+    }
+    console.log('set properties ' + JSON.stringify(payload))
+    const props =[];
+    props.push(payload);
+    return this.call("set_properties", props, options);
   }
 
   getDeviceInfo() {
@@ -356,7 +364,10 @@ module.exports = class extends Vacuum.with(
    * Start a cleaning session.
    */
   activateCleaning() {
-    return this.call_action(3, 1);
+    return this.call_action(3, 1, undefined, {
+      refresh: ["state"],
+      refreshDelay: 1000,
+    }).then(checkResult);
   }
 
   /**
@@ -372,14 +383,20 @@ module.exports = class extends Vacuum.with(
    * Stop the current cleaning session.
    */
   deactivateCleaning() {
-    return this.call_action(3, 2)
+    return this.call_action(3, 2, undefined, {
+      refresh: ["state"],
+      refreshDelay: 1000,
+    }).then(checkResult);
   }
 
   /**
    * Stop the current cleaning session and return to charge.
    */
   activateCharging() {
-    return this.call_action(3, 1);
+    return this.call_action(2, 1, undefined, {
+      refresh: ["state"],
+      refreshDelay: 1000,
+    });
   }
 
   /**
@@ -392,7 +409,7 @@ module.exports = class extends Vacuum.with(
    *   Turbo = 3
    */
   changeFanSpeed(speed) {
-    return this.call("set_suction", [speed], {
+    return this.set_property("18", "6", speed, {
       refresh: ["fanSpeed"],
     }).then(checkResult);
   }
@@ -411,6 +428,10 @@ module.exports = class extends Vacuum.with(
     // const serial = await this.call("get_properties", [{"did":"serial-number", "siid" : 1, "piid": 3}]);
     // console.log(serial);
     // return serial[0].did;
+  }
+
+  getTimer() {
+    return this.call("get_properties", {'did':'timer', 'piid':5, 'siid':18})
   }
 
   property(key) {
@@ -435,7 +456,6 @@ module.exports = class extends Vacuum.with(
     // Call get_prop to map everything
     return this.call("get_properties", props).then((result) => {
       const obj = {};
-      console.log(result)
       if(result && result !== 'undefined'){
         for (let i = 0; i < result.length; i++) {
           this._pushProperty(obj, result[i].did, result[i].value);
