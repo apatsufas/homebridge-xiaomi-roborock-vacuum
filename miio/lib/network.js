@@ -548,7 +548,7 @@ class DeviceInfo {
                * succeed. Related to issues with the vacuum
                * not responding such as described in issue #94.
                */
-              id = this.lastId + 100;
+              id = this.lastId + 1;
 
               // Make sure to remove the failed promise
               this.promises.delete(request.id);

@@ -225,6 +225,22 @@ module.exports = class extends Vacuum.with(
         "piid": 20
       }
     });
+    
+    this.defineProperty("water-box", {
+      name: "waterBox",
+      command: {
+        "siid": 18,
+        "piid": 9
+      }
+    });
+
+    this.defineProperty("map-view", {
+      name: "map-view",
+      command: {
+        "siid": 23,
+        "piid": 1
+      }
+    });
 
     this._monitorInterval = 60000;
   }
@@ -314,6 +330,7 @@ module.exports = class extends Vacuum.with(
       "aiid": aiid,
       "in": params,
     }
+    
     return this.call("action", payload, options)
   }
 
@@ -326,7 +343,6 @@ module.exports = class extends Vacuum.with(
       "piid": piid,
       "value": value,
     }
-    console.log('set properties ' + JSON.stringify(payload))
     const props =[];
     props.push(payload);
     return this.call("set_properties", props, options);
@@ -336,30 +352,6 @@ module.exports = class extends Vacuum.with(
     return this.call("miIO.info");
   }
 
-  getRoomMap() {
-    return this.call("get_room_mapping");
-  }
-
-  cleanRooms(listOfRooms) {
-    // From https://github.com/rytilahti/python-miio/issues/550#issuecomment-552780952
-    return this.call(
-      "set_mode_withroom",
-      [0, 1, listOfRooms.length].concat(listOfRooms),
-      {
-        refresh: ["state"],
-        refreshDelay: 1000,
-      }
-    ).then(checkResult);
-  }
-
-  resumeCleanRooms(listOfRooms) {
-    return cleanRooms(listOfRooms);
-  }
-
-  getTimer() {
-    return this.call("get_timer");
-  }
-
   /**
    * Start a cleaning session.
    */
@@ -367,15 +359,6 @@ module.exports = class extends Vacuum.with(
     return this.call_action(3, 1, undefined, {
       refresh: ["state"],
       refreshDelay: 1000,
-    }).then(checkResult);
-  }
-
-  /**
-   * Pause the current cleaning session.
-   */
-  pause() {
-    return this.call("set_mode_withroom", [0, 2, 0], {
-      refresh: ["state"],
     }).then(checkResult);
   }
 
@@ -409,7 +392,7 @@ module.exports = class extends Vacuum.with(
    *   Turbo = 3
    */
   changeFanSpeed(speed) {
-    return this.set_property("18", "6", speed, {
+    return this.set_property(18, 6, speed, {
       refresh: ["fanSpeed"],
     }).then(checkResult);
   }
@@ -441,6 +424,30 @@ module.exports = class extends Vacuum.with(
       }
     }
     return this._properties[key];
+  }
+
+  /**
+   * Get WaterBoxMode (only working for the model S6)
+   * @returns {Promise<*>}
+   */
+  async getWaterBoxMode() {
+    return this.property('waterBoxMode');
+  }
+
+  setWaterBoxMode(mode) {
+    return this.set_property(18, 20, mode, {
+      refresh: ["waterBoxMode"],
+    }).then(checkResult);
+  }
+
+    /**
+   * Pause the current cleaning session.
+   */
+  pause() {
+    return this.call_action(18, 2, [], {
+      refresh: ["state"],
+      refreshDelay: 1000, // https://github.com/homebridge-xiaomi-roborock-vacuum/homebridge-xiaomi-roborock-vacuum/issues/236
+    }).then(checkResult);
   }
 
   /**

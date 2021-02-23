@@ -64,21 +64,25 @@ module.exports = {
   dreame: [
     // 0%      = Off / Aus
     {
+      homekitTopLevel: 0,
       miLevel: -1,
       name: "Off",
     },
     // 33%      = Low
     {
+      homekitTopLevel: 33,
       miLevel: 1,
       name: "Low",
     },
     // 66%      = Medium
     {
+      homekitTopLevel: 66,
       miLevel: 1,
       name: "Medium",
     },
     // 100%      = High
     {
+      homekitTopLevel: 100,
       miLevel: 2,
       name: "High",
     },
