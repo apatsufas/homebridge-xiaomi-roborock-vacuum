@@ -242,6 +242,22 @@ module.exports = class extends Vacuum.with(
       }
     });
 
+    this.defineProperty("identity", {
+      name: "identity",
+      command: {
+        "siid": 17,
+        "piid": 1
+      }
+    });
+
+    this.defineProperty("serial-number", {
+      name: "serialNumber",
+      command: {
+        "siid": 1,
+        "piid": 3
+      }
+    });
+
     this._monitorInterval = 60000;
   }
 
@@ -423,6 +439,9 @@ module.exports = class extends Vacuum.with(
         return this._properties['status'];
       }
     }
+    if(key==='sensorDirtyTime'){
+      return 0;
+    }
     return this._properties[key];
   }
 
@@ -462,6 +481,7 @@ module.exports = class extends Vacuum.with(
     }
     // Call get_prop to map everything
     return this.call("get_properties", props).then((result) => {
+      console.log(result)
       const obj = {};
       if(result && result !== 'undefined'){
         for (let i = 0; i < result.length; i++) {

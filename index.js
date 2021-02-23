@@ -197,7 +197,8 @@ class XiaomiRoborockVacuum {
         .getCharacteristic(Characteristic.On)
         .on("get", (cb) =>
           // If the speed is over 0%, assume it's ON
-          callbackify(async () => (await this.getWaterSpeed()) > 0, cb)
+          callbackify(async () => (
+            await this.getWaterSpeed()) > 0 && this.getCleaning(), cb)
         )
         .on("set", (newState, cb) =>
           callbackify(() => {
