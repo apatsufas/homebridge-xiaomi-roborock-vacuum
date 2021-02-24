@@ -185,7 +185,7 @@ module.exports = class extends Vacuum.with(
     // From https://github.com/rytilahti/python-miio/issues/550#issuecomment-570808184
     this.defineProperty("brush_left_time", {
       name: "mainBrushWorkTime",
-      mapper: (v) => v * 3600,
+      mapper: (v) => 1080000 - v * 3600,
       command: {
         "siid": 26,
         "piid": 1
@@ -194,7 +194,7 @@ module.exports = class extends Vacuum.with(
 
     this.defineProperty("brush_left_time2", {
       name: "sideBrushWorkTime",
-      mapper: (v) => v * 3600,
+      mapper: (v) => 720000 - v * 3600,
       command: {
         "siid": 28,
         "piid": 1
@@ -203,7 +203,7 @@ module.exports = class extends Vacuum.with(
 
     this.defineProperty("filter_left_time", {
       name: "filterWorkTime",
-      mapper: (v) => v * 3600,
+      mapper: (v) => 540000 - v * 3600,
       command: {
         "siid": 27,
         "piid": 2
