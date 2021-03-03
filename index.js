@@ -198,7 +198,7 @@ class XiaomiRoborockVacuum {
         .on("get", (cb) =>
           // If the speed is over 0%, assume it's ON
           callbackify(async () => (
-            await this.getWaterSpeed()) > 0 && this.getCleaning(), cb)
+            await this.getWaterSpeed()) > 0 && await this.getCleaning(), cb)
         )
         .on("set", (newState, cb) =>
           callbackify(() => {
@@ -1281,9 +1281,9 @@ class XiaomiRoborockVacuum {
       );
       homekitValue = homekitTopLevel || 0;
     }
-    this.services.waterBox
-      .getCharacteristic(Characteristic.On)
-      .updateValue(homekitValue > 0);
+    // this.services.waterBox
+    //   .getCharacteristic(Characteristic.On)
+    //   .updateValue(homekitValue > 0);
     return homekitValue;
   }
 
@@ -1383,9 +1383,9 @@ class XiaomiRoborockVacuum {
       this.services.waterBox
         .getCharacteristic(Characteristic.RotationSpeed)
         .updateValue(homekitTopLevel);
-      this.services.waterBox
-        .getCharacteristic(Characteristic.On)
-        .updateValue(homekitTopLevel > 0);
+      // this.services.waterBox
+      //   .getCharacteristic(Characteristic.On)
+      //   .updateValue(homekitTopLevel > 0);
     }
   }
 
