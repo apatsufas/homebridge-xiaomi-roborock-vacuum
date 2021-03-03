@@ -323,8 +323,6 @@ module.exports = class extends Vacuum.with(
       "aiid": aiid,
       "in": params,
     }
-    console.log("call action paylod:");
-    console.log(payload);
 
     return this.call("action", payload, options)
   }
@@ -439,7 +437,21 @@ module.exports = class extends Vacuum.with(
   }
 
   cleanRooms(listOfRooms) {
-    return this.call_action(18, 1, [{"piid":1,"value":18},{"piid":21,"value":{"selects":[listOfRooms]}}], {
+    const rooms = [];
+    listOfRooms.forEach(element => {
+      const room = [element, 1, 0, 1, 1];
+      rooms.push(room);
+    });
+    let roomsString = "";
+    rooms.forEach(element => {
+      if(rooms.indexOf(element) > 0){
+        roomsString += ","
+      }
+      roomsString += "["
+      roomsString += element
+      roomsString += "]"
+    });
+    return this.call_action(18, 1, [{"piid":1,"value":18},{"piid":21,"value":"{\"selects\":[" + roomsString + "]}"}], {
       refresh: ["state"],
       refreshDelay: 1000,
     }).then(checkResult);
