@@ -5,7 +5,6 @@ const {
   Vacuum,
   AdjustableFanSpeed,
   AutonomousCleaning,
-  SpotCleaning,
 } = require("abstract-things/climate");
 
 const MiioApi = require("../device");
@@ -16,6 +15,8 @@ module.exports = class extends Vacuum.with(
   MiioApi,
   BatteryLevel,
   AdjustableFanSpeed,
+  AutonomousCharging,
+  AutonomousCleaning,
   ChargingState
 ) {
   static get type() {
@@ -322,7 +323,9 @@ module.exports = class extends Vacuum.with(
       "aiid": aiid,
       "in": params,
     }
-    
+    console.log("call action paylod:");
+    console.log(payload);
+
     return this.call("action", payload, options)
   }
 
@@ -435,6 +438,21 @@ module.exports = class extends Vacuum.with(
     }).then(checkResult);
   }
 
+  cleanRooms(listOfRooms) {
+    return this.call_action(18, 1, [{"piid":1,"value":18},{"piid":21,"value":{"selects":[listOfRooms]}}], {
+      refresh: ["state"],
+      refreshDelay: 1000,
+    }).then(checkResult);
+  }
+
+  cleanZones(listOfZones) {
+    const zone = listOfZones[0];
+    zone.pop();
+    return this.call_action(18, 1, [{"piid":1,"value":19},{"piid":21,"value":zone.join()}], {
+      refresh: ["state"],
+      refreshDelay: 1000,
+    }).then(checkResult);
+  }
     /**
    * Pause the current cleaning session.
    */
