@@ -1535,7 +1535,7 @@ class XiaomiRoborockVacuum {
         2
       )}%.`
     );
-    return lifetimepercent;
+    return Math.min(100, lifetimepercent);
   }
 
   async getCareFilter() {
@@ -1550,7 +1550,7 @@ class XiaomiRoborockVacuum {
         "filterWorkTime"
       )} seconds / ${lifetimepercent.toFixed(2)}%.`
     );
-    return lifetimepercent;
+    return Math.min(100, lifetimepercent);
   }
 
   async getCareSideBrush() {
@@ -1565,7 +1565,7 @@ class XiaomiRoborockVacuum {
         "sideBrushWorkTime"
       )} seconds / ${lifetimepercent.toFixed(2)}%.`
     );
-    return lifetimepercent;
+    return Math.min(100, lifetimepercent);
   }
 
   async getCareMainBrush() {
@@ -1580,6 +1580,6 @@ class XiaomiRoborockVacuum {
         "mainBrushWorkTime"
       )} seconds / ${lifetimepercent.toFixed(2)}%.`
     );
-    return lifetimepercent;
+    return Math.min(100, lifetimepercent);
   }
 }
